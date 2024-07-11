@@ -1,5 +1,5 @@
 class Ship {
-  constructor(name, length, timesHit, maxHits, sunk) {
+  constructor(name, length, timesHit = 0, maxHits, sunk = false) {
     this.name = name;
     this.length = length;
     this.timesHit = timesHit;
@@ -8,16 +8,39 @@ class Ship {
   }
 
   hit() {
-    let count = 0;
-    if (this.timesHit) {
-      count++;
-    }
+    this.timesHit += 1;
+    this.isSunk();
   }
 
   isSunk() {
     if (this.timesHit === this.maxHits) {
-      this.sunk = true;
+      return (this.sunk = true);
     }
-    this.sunk = false;
+    return (this.sunk = false);
   }
 }
+
+class Gameboard {
+  constructor(size) {
+    this.size = size;
+    this.board = this.createBoard(size);
+    this.ships = [];
+  }
+
+  createBoard(size) {
+    const board = [];
+    for (let i = 0; i < size; i++) {
+      const row = new Array(size).fill(null);
+      board.push(row);
+    }
+    return board;
+  }
+
+  placeShip(ship) {}
+
+  receiveAttack() {
+    this.playableSquares;
+  }
+}
+
+module.exports = { Ship, Gameboard };
