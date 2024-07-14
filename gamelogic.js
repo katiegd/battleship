@@ -1,4 +1,4 @@
-class Ship {
+export class Ship {
   constructor(name, length, timesHit = 0, maxHits, sunk = false) {
     this.name = name;
     this.length = length;
@@ -8,7 +8,7 @@ class Ship {
   }
 
   hit() {
-    this.timesHit++;
+    this.timesHit += 1;
     this.isSunk();
   }
 
@@ -22,11 +22,12 @@ class Ship {
   }
 }
 
-class Gameboard {
+export class Gameboard {
   constructor(size) {
     this.size = size;
     this.board = this.createBoard(size);
     this.ships = [];
+    this.createShips();
   }
 
   createBoard(size) {
@@ -38,6 +39,16 @@ class Gameboard {
     return board;
   }
 
+  createShips() {
+    const carrier = new Ship("carrier", 5, 0, 5);
+    const battleship = new Ship("battleship", 4, 0, 4);
+    const destroyer = new Ship("destroyer", 3, 0, 3);
+    const submarine = new Ship("submarine", 3, 0, 3);
+    const patrol = new Ship("patrol", 2, 0, 2);
+
+    this.ships.push(carrier, battleship, destroyer, submarine, patrol);
+  }
+
   placeShips(ship, xStart, yStart, orientation) {
     if (this.isValidPlacement(ship, xStart, yStart, orientation)) {
       for (let i = 0; i < ship.length; i++) {
@@ -46,7 +57,6 @@ class Gameboard {
         } else if (orientation === "vertical") {
           this.board[xStart][yStart + i] = ship;
         }
-        this.ships.push(ship);
       }
     } else {
       throw new Error("Invalid ship placement.");
@@ -78,20 +88,23 @@ class Gameboard {
 
   receiveAttack(x, y) {
     if (this.board[x][y] === "Hit" || this.board[x][y] === "Miss") {
+      console.log("Already attacked");
       return "Already attacked.";
     }
     if (this.board[x][y] instanceof Ship) {
-      this.board[x][y].hit();
+      const ship = this.board[x][y];
+      ship.hit();
       this.board[x][y] = "Hit";
+      console.log(ship.timesHit);
       return "Hit";
-    } else {
+    } else if (this.board[x][y] === null) {
       this.board[x][y] = "Miss";
       return "Miss";
     }
   }
 }
 
-class Player {
+export class Player {
   constructor(name) {
     this.name = name;
     this.board = new Gameboard(10);
@@ -103,4 +116,4 @@ class Player {
   }
 }
 
-module.exports = { Ship, Gameboard, Player };
+// module.exports = { Ship, Gameboard, Player };

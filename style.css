@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton+SC&display=swap");
+
+body {
+  background-color: aliceblue;
+  font-family: "Anton SC", sans-serif;
+}
+
+#main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#header {
+  font-size: 2rem;
+}
+
+#boards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 100px;
+}
+
+#player-board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  background-color: white;
+  width: 500px;
+  height: 500px;
+}
+
+#computer-board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  background-color: white;
+  width: 500px;
+  height: 500px;
+}
+
+.board-square {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(218, 218, 218);
+  width: 49px;
+  height: 49px;
+}
+
+.board-square:hover {
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.ship {
+  background-color: red;
+}
+
+.comp-ship {
+  background-color: blue;
+}
+
+.hit {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2rem;
+  color: white;
+}
+
+.miss {
+  color: rgb(91, 91, 91);
+  font-size: 3rem;
+}
