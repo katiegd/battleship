@@ -95,7 +95,6 @@ export class Gameboard {
       const ship = this.board[x][y];
       ship.hit();
       this.board[x][y] = "Hit";
-      console.log(ship.timesHit);
       return "Hit";
     } else if (this.board[x][y] === null) {
       this.board[x][y] = "Miss";
@@ -116,4 +115,5 @@ export class Player {
   }
 }
 
+// for testing purposes:
 // module.exports = { Ship, Gameboard, Player };

@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Anton+SC&display=swap");
 
 body {
+  margin: 0px;
   background-color: aliceblue;
   font-family: "Anton SC", sans-serif;
 }

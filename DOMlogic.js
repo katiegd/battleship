@@ -54,6 +54,8 @@ export function DOMLogic() {
             boardSquare.classList.add("hit");
             boardSquare.textContent = "x";
           }
+
+          checkForWinner();
         });
 
         computerBoard.appendChild(boardSquare);
@@ -66,6 +68,14 @@ export function DOMLogic() {
 
     mainContainer.appendChild(headerContainer);
     mainContainer.appendChild(boardsContainer);
+  }
+
+  function checkForWinner() {
+    if (user.hasLost()) {
+      console.log("Sorry, you lose!");
+    } else if (computer.hasLost()) {
+      console.log("You win!");
+    }
   }
 
   function startGame() {
