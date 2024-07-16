@@ -3,6 +3,7 @@ import { Ship, Player, Gameboard } from "./gamelogic.js";
 export function DOMLogic() {
   const user = new Player("Player1");
   const computer = new Player("Computer");
+  let currentPlayer = user;
 
   const mainContainer = document.querySelector("#main-container");
   const headerContainer = document.createElement("div");
@@ -44,19 +45,27 @@ export function DOMLogic() {
           boardSquare.classList.add("comp-ship");
         }
 
-        boardSquare.addEventListener("click", () => {
-          computer.board.receiveAttack(i, j);
+        const handleClick = () => {
+          // remove event listener if someone has lost. game is over
+          if (user.hasLost() || computer.hasLost()) {
+            boardSquare.removeEventListener("click", handleClick);
+          } else {
+            const result = computer.board.receiveAttack(i, j);
 
-          if (computer.board.board[i][j] === "Miss") {
-            boardSquare.classList.add("miss");
-            boardSquare.textContent = "•";
-          } else if (computer.board.board[i][j] === "Hit") {
-            boardSquare.classList.add("hit");
-            boardSquare.textContent = "x";
+            if (result === "Miss") {
+              boardSquare.classList.add("miss");
+              boardSquare.textContent = "•";
+            } else if (result === "Hit") {
+              boardSquare.classList.add("hit");
+              boardSquare.textContent = "x";
+            }
+
+            checkForWinner();
+            switchTurns();
           }
+        };
 
-          checkForWinner();
-        });
+        boardSquare.addEventListener("click", handleClick);
 
         computerBoard.appendChild(boardSquare);
       }
@@ -71,29 +80,86 @@ export function DOMLogic() {
   }
 
   function checkForWinner() {
+    let winner = "";
+
     if (user.hasLost()) {
-      console.log("Sorry, you lose!");
+      winner = computer.name;
+      displayWinMessage(winner);
     } else if (computer.hasLost()) {
-      console.log("You win!");
+      winner = user.name;
+      displayWinMessage(winner);
+    }
+  }
+
+  function displayWinMessage(winner) {
+    const winnerMessage = document.createElement("h1");
+    winnerMessage.textContent = `The battle is over. Captain ${winner} wins!`;
+    mainContainer.appendChild(winnerMessage);
+  }
+
+  function placeShipsRandomly(board) {
+    board.ships.forEach((ship) => {
+      let placed = false;
+
+      while (!placed) {
+        let orientation = Math.random();
+        if (orientation >= 0.5) {
+          orientation = "horizontal";
+        } else {
+          orientation = "vertical";
+        }
+        let i = Math.floor(Math.random() * 10);
+        let j = Math.floor(Math.random() * 10);
+
+        if (board.isValidPlacement(ship, i, j, orientation)) {
+          board.placeShips(ship, i, j, orientation);
+          placed = true;
+        }
+      }
+    });
+  }
+
+  function computerTurn() {
+    let moveMade = false;
+    while (!moveMade) {
+      let i = Math.floor(Math.random() * 10);
+      let j = Math.floor(Math.random() * 10);
+      const result = user.board.receiveAttack(i, j);
+
+      if (result !== "Already attacked.") {
+        const playerBoard = document.getElementById("player-board");
+        const attackedSquare = playerBoard.children[i * user.board.size + j];
+        console.log(attackedSquare);
+        updateBoardSquare(attackedSquare);
+        moveMade = true;
+        switchTurns();
+      }
+    }
+  }
+
+  function updateBoardSquare(attackedSquare) {
+    const boardSquare = attackedSquare;
+    if (attackedSquare === "Miss") {
+      boardSquare.classList.add("miss");
+      boardSquare.textContent = "•";
+    } else if (attackedSquare === "Hit") {
+      boardSquare.classList.add("hit");
+      boardSquare.textContent = "x";
+    }
+  }
+
+  function switchTurns() {
+    if (currentPlayer === user) {
+      currentPlayer = computer;
+      computerTurn();
+    } else {
+      currentPlayer === user;
     }
   }
 
   function startGame() {
-    //Create user board with predetermined values for now
-    user.board.placeShips(user.board.ships[0], 0, 0, "horizontal");
-    user.board.placeShips(user.board.ships[1], 2, 3, "vertical");
-    user.board.placeShips(user.board.ships[2], 4, 7, "horizontal");
-    user.board.placeShips(user.board.ships[3], 0, 4, "vertical");
-    user.board.placeShips(user.board.ships[4], 9, 3, "vertical");
-
-    //Create computer board with predetermined values for now
-    computer.board.placeShips(computer.board.ships[0], 1, 1, "vertical");
-    computer.board.placeShips(computer.board.ships[1], 5, 2, "horizontal");
-    computer.board.placeShips(computer.board.ships[2], 4, 5, "vertical");
-    computer.board.placeShips(computer.board.ships[3], 7, 8, "horizontal");
-    computer.board.placeShips(computer.board.ships[4], 2, 8, "vertical");
-
-    console.log(computer.board);
+    placeShipsRandomly(user.board);
+    placeShipsRandomly(computer.board);
 
     renderHTML();
   }
