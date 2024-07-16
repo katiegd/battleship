@@ -41,7 +41,8 @@ body {
   height: 500px;
 }
 
-.board-square {
+.board-square,
+.enemy-board-square {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,7 +51,7 @@ body {
   height: 49px;
 }
 
-.board-square:hover {
+.enemy-board-square:hover {
   opacity: 0.9;
   cursor: pointer;
 }

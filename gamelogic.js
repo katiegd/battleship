@@ -88,7 +88,6 @@ export class Gameboard {
 
   receiveAttack(x, y) {
     if (this.board[x][y] === "Hit" || this.board[x][y] === "Miss") {
-      console.log("Already attacked");
       return "Already attacked.";
     }
     if (this.board[x][y] instanceof Ship) {

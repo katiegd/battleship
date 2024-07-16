@@ -38,7 +38,7 @@ export function DOMLogic() {
     for (let i = 0; i < computer.board.board.length; i++) {
       for (let j = 0; j < computer.board.board.length; j++) {
         const boardSquare = document.createElement("div");
-        boardSquare.setAttribute("class", "board-square");
+        boardSquare.setAttribute("class", "enemy-board-square");
 
         //Delete eventually to hide computer ships
         if (computer.board.board[i][j] instanceof Ship) {
@@ -51,7 +51,9 @@ export function DOMLogic() {
             boardSquare.removeEventListener("click", handleClick);
           } else {
             const result = computer.board.receiveAttack(i, j);
-
+            if (result === "Already attacked.") {
+              return;
+            }
             if (result === "Miss") {
               boardSquare.classList.add("miss");
               boardSquare.textContent = "•";
@@ -125,24 +127,45 @@ export function DOMLogic() {
       let i = Math.floor(Math.random() * 10);
       let j = Math.floor(Math.random() * 10);
       const result = user.board.receiveAttack(i, j);
+      console.log(result);
 
       if (result !== "Already attacked.") {
         const playerBoard = document.getElementById("player-board");
+        // PlayerBoard uses a 1D index, so that's why we're multiplying i * 10 (user.board.size) + j
         const attackedSquare = playerBoard.children[i * user.board.size + j];
-        console.log(attackedSquare);
-        updateBoardSquare(attackedSquare);
+        setTimeout(() => {
+          updateBoardSquare(attackedSquare, result);
+        }, 500);
         moveMade = true;
+
         switchTurns();
+      }
+      if (result === "Hit") {
+        let hitCoordinates = [i][j];
+        let direction = Math.floor(Math.random() * 4);
+        if (direction === 1 && i < 9) {
+          user.board.receiveAttack(i + 1, j);
+        }
+        if (direction === 2 && i > 0) {
+          user.board.receiveAttack(i - 1, j);
+        }
+        if (direction === 3 && j < 9) {
+          user.board.receiveAttack(i, j + 1);
+        }
+        if (direction === 4 && j > 0) {
+          user.board.receiveAttack(i, j - 1);
+        }
       }
     }
   }
 
-  function updateBoardSquare(attackedSquare) {
+  function updateBoardSquare(attackedSquare, result) {
     const boardSquare = attackedSquare;
-    if (attackedSquare === "Miss") {
+    console.log(attackedSquare);
+    if (result === "Miss") {
       boardSquare.classList.add("miss");
       boardSquare.textContent = "•";
-    } else if (attackedSquare === "Hit") {
+    } else if (result === "Hit") {
       boardSquare.classList.add("hit");
       boardSquare.textContent = "x";
     }
@@ -153,7 +176,7 @@ export function DOMLogic() {
       currentPlayer = computer;
       computerTurn();
     } else {
-      currentPlayer === user;
+      currentPlayer = user;
     }
   }
 
