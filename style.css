@@ -2,11 +2,12 @@
 
 body {
   margin: 0px;
-  background-color: aliceblue;
+  background-color: rgb(0, 24, 45);
   font-family: "Anton SC", sans-serif;
 }
 
 #main-container {
+  margin: 0px auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -15,11 +16,15 @@ body {
 
 #header {
   font-size: 2rem;
+  color: rgb(22, 74, 119);
+  letter-spacing: 5px;
+  text-shadow: 2px 2px 0px rgba(227, 227, 227, 1);
 }
 
 #boards {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 100px;
 }
 
@@ -27,7 +32,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 1px;
-  background-color: white;
+  background-color: rgb(0, 24, 45);
   width: 500px;
   height: 500px;
 }
@@ -36,7 +41,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 1px;
-  background-color: white;
+  background-color: 0, 24, 45;
   width: 500px;
   height: 500px;
 }
@@ -46,7 +51,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(218, 218, 218);
+  background-color: rgb(22, 74, 119);
   width: 49px;
   height: 49px;
 }
@@ -57,20 +62,21 @@ body {
 }
 
 .ship {
-  background-color: red;
+  background-color: rgba(227, 227, 227, 0.7);
 }
 
 .comp-ship {
-  background-color: blue;
+  background-color: none;
 }
 
 .hit {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 2rem;
-  color: white;
+  color: rgb(255, 255, 255);
+  background-color: rgba(158, 24, 24, 0.66);
 }
 
 .miss {
-  color: rgb(91, 91, 91);
+  color: rgba(0, 0, 0, 0.7);
   font-size: 3rem;
 }

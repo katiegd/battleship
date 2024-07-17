@@ -63,6 +63,28 @@ export class Gameboard {
     }
   }
 
+  placeShipsRandomly() {
+    this.ships.forEach((ship) => {
+      let placed = false;
+
+      while (!placed) {
+        let orientation = Math.random();
+        if (orientation >= 0.5) {
+          orientation = "horizontal";
+        } else {
+          orientation = "vertical";
+        }
+        let i = Math.floor(Math.random() * this.size);
+        let j = Math.floor(Math.random() * this.size);
+
+        if (this.isValidPlacement(ship, i, j, orientation)) {
+          this.placeShips(ship, i, j, orientation);
+          placed = true;
+        }
+      }
+    });
+  }
+
   isValidPlacement(ship, xStart, yStart, orientation) {
     for (let i = 0; i < ship.length; i++) {
       if (orientation === "horizontal") {
@@ -99,6 +121,15 @@ export class Gameboard {
       this.board[x][y] = "Miss";
       return "Miss";
     }
+  }
+
+  hasShipSunk() {
+    for (let ship of this.ships) {
+      if (ship.isSunk()) {
+        return ship;
+      }
+    }
+    return null;
   }
 }
 
