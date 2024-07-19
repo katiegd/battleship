@@ -63,6 +63,8 @@ export class Gameboard {
     }
   }
 
+  clearShiops() {}
+
   placeShipsRandomly() {
     this.ships.forEach((ship) => {
       let placed = false;

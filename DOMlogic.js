@@ -22,9 +22,12 @@ export function DOMLogic() {
 
   randomP1Ships.addEventListener("click", () => {
     user.board.placeShipsRandomly();
+    renderBoards();
   });
 
   function renderBoards() {
+    mainContainer.innerHTML = "";
+
     const boardsContainer = document.createElement("div");
     boardsContainer.setAttribute("id", "boards");
 
