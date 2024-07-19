@@ -17,11 +17,15 @@ export function DOMLogic() {
   const header = document.createElement("h1");
   header.textContent = "battleship";
 
-  const randomP1Ships = document.createElement("button");
-  randomP1Ships.textContent = "Randomize Ship Placement";
+  const player1BoardContainer = document.createElement("div");
+  player1BoardContainer.classList.add("P1-board-button-container");
 
-  randomP1Ships.addEventListener("click", () => {
+  const randomP1ShipsBtn = document.createElement("button");
+  randomP1ShipsBtn.textContent = "Randomize Ship Placement";
+
+  randomP1ShipsBtn.addEventListener("click", () => {
     user.board.placeShipsRandomly();
+
     renderBoards();
   });
 
@@ -90,9 +94,12 @@ export function DOMLogic() {
     }
 
     headerContainer.appendChild(header);
-    boardsContainer.appendChild(player1Board);
+
+    player1BoardContainer.appendChild(player1Board);
+    player1BoardContainer.appendChild(randomP1ShipsBtn);
+
+    boardsContainer.appendChild(player1BoardContainer);
     boardsContainer.appendChild(computerBoard);
-    boardsContainer.appendChild(randomP1Ships);
 
     mainContainer.appendChild(headerContainer);
     mainContainer.appendChild(boardsContainer);

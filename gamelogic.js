@@ -63,9 +63,22 @@ export class Gameboard {
     }
   }
 
-  clearShiops() {}
+  clearShips() {
+    this.ships = [];
+
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[i].length; j++) {
+        if (this.board[i][j] instanceof Ship) {
+          this.board[i][j] = null;
+        }
+      }
+    }
+  }
 
   placeShipsRandomly() {
+    this.clearShips();
+    this.createShips();
+
     this.ships.forEach((ship) => {
       let placed = false;
 

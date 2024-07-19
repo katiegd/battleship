@@ -80,3 +80,27 @@ body {
   color: rgba(0, 0, 0, 0.7);
   font-size: 3rem;
 }
+
+.P1-board-button-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+button {
+  font-weight: 900;
+  color: rgba(227, 227, 227, 1);
+  background-color: rgb(22, 74, 119);
+  width: 50%;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 80%;
+}
