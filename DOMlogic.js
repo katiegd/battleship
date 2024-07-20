@@ -12,25 +12,104 @@ export function DOMLogic() {
   let initialHit = null;
 
   const mainContainer = document.querySelector("#main-container");
+
   const headerContainer = document.createElement("div");
   headerContainer.setAttribute("id", "header");
+
   const header = document.createElement("h1");
+  header.classList.add("title-header");
   header.textContent = "battleship";
 
-  const player1BoardContainer = document.createElement("div");
-  player1BoardContainer.classList.add("P1-board-button-container");
+  const userInputDiv = document.createElement("div");
+  userInputDiv.classList.add("user-input-div");
+
+  const userInputLabel = document.createElement("span");
+  userInputLabel.classList.add("user-input-label");
+  userInputLabel.textContent = "Name:";
+
+  const userInput = document.createElement("input");
+  userInput.classList.add("user-input");
+  userInput.setAttribute("required", "required");
+
+  const userInputSubmitBtn = document.createElement("button");
+  userInputSubmitBtn.classList.add("submit-btn");
+  userInputSubmitBtn.textContent = "GO";
+
+  const restartBtn = document.createElement("button");
+  restartBtn.classList.add("restart-btn");
+  restartBtn.textContent = "Restart";
+
+  restartBtn.addEventListener("click", () => {
+    user.board.clearShips();
+    renderBoards();
+    renderGameElements();
+  });
+
+  let userName = "Player 1";
+
+  function initialPageLoad() {
+    userInputDiv.appendChild(userInputLabel);
+    userInputDiv.appendChild(userInput);
+    userInputDiv.appendChild(userInputSubmitBtn);
+
+    headerContainer.appendChild(header);
+    mainContainer.appendChild(headerContainer);
+    mainContainer.appendChild(userInputDiv);
+
+    function handleSubmit() {
+      if (userInput.checkValidity()) {
+        userName = userInput.value;
+        renderBoards();
+        renderGameElements();
+      } else {
+        showErrorMessage();
+      }
+    }
+    userInputSubmitBtn.addEventListener("click", () => {
+      handleSubmit();
+    });
+
+    userInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        handleSubmit();
+      }
+    });
+  }
+
+  function showErrorMessage() {
+    const errorMessage = document.createElement("span");
+    errorMessage.classList.add("error-message");
+    errorMessage.textContent = "Please enter your name, Captain!";
+
+    mainContainer.appendChild(errorMessage);
+  }
 
   const randomP1ShipsBtn = document.createElement("button");
-  randomP1ShipsBtn.textContent = "Randomize Ship Placement";
+  randomP1ShipsBtn.classList.add("randomize-btn");
+  randomP1ShipsBtn.textContent = "Randomize Ships";
+
+  const startBtn = document.createElement("button");
+  startBtn.classList.add("start-btn");
+  startBtn.textContent = "START";
+
+  startBtn.addEventListener("click", startGame);
 
   randomP1ShipsBtn.addEventListener("click", () => {
     user.board.placeShipsRandomly();
-
     renderBoards();
+    renderGameElements();
   });
 
   function renderBoards() {
     mainContainer.innerHTML = "";
+
+    const player1BoardName = document.createElement("h2");
+    player1BoardName.classList.add("h2-player-name");
+    player1BoardName.textContent = `Captain ${userName}`;
+
+    const computerBoardName = document.createElement("h2");
+    computerBoardName.classList.add("h2-computer-name");
+    computerBoardName.textContent = `Captain Computer`;
 
     const boardsContainer = document.createElement("div");
     boardsContainer.setAttribute("id", "boards");
@@ -39,6 +118,7 @@ export function DOMLogic() {
     const computerBoard = document.createElement("div");
 
     player1Board.setAttribute("id", "player-board");
+
     computerBoard.setAttribute("id", "computer-board");
 
     // Create the board squares for user
@@ -95,14 +175,23 @@ export function DOMLogic() {
 
     headerContainer.appendChild(header);
 
-    player1BoardContainer.appendChild(player1Board);
-    player1BoardContainer.appendChild(randomP1ShipsBtn);
-
-    boardsContainer.appendChild(player1BoardContainer);
+    boardsContainer.appendChild(player1BoardName);
+    boardsContainer.appendChild(computerBoardName);
+    boardsContainer.appendChild(player1Board);
     boardsContainer.appendChild(computerBoard);
 
     mainContainer.appendChild(headerContainer);
     mainContainer.appendChild(boardsContainer);
+  }
+
+  function renderGameElements() {
+    const gameBtnsDiv = document.createElement("div");
+    gameBtnsDiv.classList.add("game-btns-div");
+
+    gameBtnsDiv.appendChild(randomP1ShipsBtn);
+    gameBtnsDiv.appendChild(startBtn);
+
+    mainContainer.appendChild(gameBtnsDiv);
   }
 
   function checkForWinner() {
@@ -118,9 +207,13 @@ export function DOMLogic() {
   }
 
   function displayWinMessage(winner) {
+    winner = userName;
     const winnerMessage = document.createElement("h1");
+    winnerMessage.classList.add("winner-message");
     winnerMessage.textContent = `The battle is over. Captain ${winner} wins!`;
+
     mainContainer.appendChild(winnerMessage);
+    mainContainer.appendChild(restartBtn);
   }
 
   function computerTurn() {
@@ -265,11 +358,19 @@ export function DOMLogic() {
   }
 
   function startGame() {
-    user.board.placeShipsRandomly();
     computer.board.placeShipsRandomly();
+
+    const boardsContainer = document.querySelector("#boards");
+    if (boardsContainer.contains(startBtn)) {
+      boardsContainer.removeChild(startBtn);
+    }
+
+    if (boardsContainer.contains(randomP1ShipsBtn)) {
+      boardsContainer.removeChild(randomP1ShipsBtn);
+    }
 
     renderBoards();
   }
 
-  startGame();
+  initialPageLoad();
 }
